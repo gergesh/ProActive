@@ -24,22 +24,30 @@ public class ProActive implements IXposedHookLoadPackage {
 
         // Solid Explorer
         else if (lpparam.packageName.equals("pl.solidexplorer2")) {
-            findAndHookMethod("pl.solidexplorer.SELicenseManager", lpparam.classLoader,
-                    "checkUnlockerLicense", XC_MethodReplacement.returnConstant(true));
+            findAndHookMethod("pl.solidexplorer.backend.seApi.model.RedeemStatus", lpparam.classLoader,
+                    "getSuccessful", new XC_MethodHook() {
+                @Override
+                protected final void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    Boolean b = true;
+                    param.setResult(b);
+                }
+            });
+
+            findAndHookMethod("pl.solidexplorer.backend.seApi.model.RedeemStatus", lpparam.classLoader,
+                    "getComponentName", XC_MethodReplacement.returnConstant("full_version"));
         }
 
         // BG Stats
         else if (lpparam.packageName.equals("nl.eerko.boardgamestats")) {
             findAndHookMethod("nl.eerko.boardgamestats.main.AppUtils", lpparam.classLoader,
-                    "getSharedPreferencesBoolean", new XC_MethodHook() {
-                        @Override
-                        protected final void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            String str = (String) param.args[1];
-                            if (str.indexOf("iap") == 0 && str.indexOf("Active") == str.length() - 6)
-                                param.setResult(true);
-                        }
-                    });
-
+                    "getSharedPreferenceBool", new XC_MethodHook() {
+                @Override
+                protected final void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    String str = (String) param.args[1];
+                    if (str.indexOf("iap") == 0 && str.indexOf("Active") == str.length() - 6)
+                        param.setResult(true);
+                }
+            });
         }
     }
 }
