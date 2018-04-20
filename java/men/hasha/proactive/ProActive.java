@@ -14,16 +14,22 @@ public class ProActive implements IXposedHookLoadPackage {
                     lpparam.classLoader, "d", XC_MethodReplacement.returnConstant(true));
         }
 
-	// Phonograph
-	else if (lpparam.packageName.equals("com.kabouzeid.gramophone")) {
-	    findAndHookMethod("com.kabouzeid.gramophone.App", lpparam.classLoader,
-	            "isProVersion", XC_MethodReplacement.returnConstant(true));
-	}
+        // Phonograph
+        else if (lpparam.packageName.equals("com.kabouzeid.gramophone")) {
+            findAndHookMethod("com.kabouzeid.gramophone.App", lpparam.classLoader,
+                    "isProVersion", XC_MethodReplacement.returnConstant(true));
+        }
 
-	// Solid Explorer
-	else if (lpparam.packageName.equals("pl.solidexplorer2")) {
-	    findAndHookMethod("pl.solidexplorer.SELicenseManager", lpparam.classLoader,
-	            "checkUnlockerLicense", XC_MethodReplacement.returnConstant(true));
-	}
+        // Solid Explorer
+        else if (lpparam.packageName.equals("pl.solidexplorer2")) {
+            findAndHookMethod("pl.solidexplorer.SELicenseManager", lpparam.classLoader,
+                    "checkUnlockerLicense", XC_MethodReplacement.returnConstant(true));
+        }
+
+        // BG Stats
+        else if (lpparam.packageName.equals("nl.eerko.boardgamestats")) {
+            findAndHookMethod("nl.eerko.boardgamestats.main.AppUtils", lpparam.classLoader,
+                    "getSharedPreferenceBool", XC_MethodReplacement.returnConstant(true));
+        }
     }
 }
