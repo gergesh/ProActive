@@ -1,7 +1,9 @@
 package men.hasha.proactive;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
@@ -29,7 +31,15 @@ public class ProActive implements IXposedHookLoadPackage {
         // BG Stats
         else if (lpparam.packageName.equals("nl.eerko.boardgamestats")) {
             findAndHookMethod("nl.eerko.boardgamestats.main.AppUtils", lpparam.classLoader,
-                    "getSharedPreferenceBool", XC_MethodReplacement.returnConstant(true));
+                    "getSharedPreferencesBoolean", new XC_MethodHook() {
+                        @Override
+                        protected final void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            String str = (String) param.args[1];
+                            if (str.indexOf("iap") == 0 && str.indexOf("Active") == str.length() - 6)
+                                param.setResult(true);
+                        }
+                    });
+
         }
     }
 }
