@@ -65,4 +65,14 @@ public class Hooks {
             }
         });
     }
+
+    public static void hookSDMaid(XC_LoadPackage.LoadPackageParam lpparam) {
+        // Pro mode
+        c = findClass("eu.thedarken.sdm.tools.upgrades.e", lpparam.classLoader);
+        Class<?> d = findClass("eu.thedarken.sdm.tools.upgrades.d", lpparam.classLoader);
+        m = findMethodExact(c, "a", d);
+        XposedBridge.hookMethod(m, XC_MethodReplacement.returnConstant(true));
+        // UI changes
+
+    }
 }

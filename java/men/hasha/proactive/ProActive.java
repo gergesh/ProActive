@@ -1,6 +1,7 @@
 package men.hasha.proactive;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class ProActive implements IXposedHookLoadPackage {
@@ -22,6 +23,10 @@ public class ProActive implements IXposedHookLoadPackage {
                 break;
             case "com.keramidas.TitaniumBackup":
                 Hooks.hookTitaniumBackup(lpparam);
+                break;
+            case "eu.thedarken.sdm":
+                XposedBridge.log("SDMaid launched");
+                Hooks.hookSDMaid(lpparam);
                 break;
         }
     }
