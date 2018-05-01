@@ -18,34 +18,38 @@ public class Hooks {
     static Class<?> c;
     static Method m;
 
-    public static void hookShuttle(XC_LoadPackage.LoadPackageParam lpparam) {
+    // Shuttle
+    public static void another_music_player(XC_LoadPackage.LoadPackageParam lpparam) {
         findAndHookMethod("com.simplecity.amp_library.ShuttleApplication",
                 lpparam.classLoader, "d", XC_MethodReplacement.returnConstant(true));
     }
 
-    public static void hookPhonograph(XC_LoadPackage.LoadPackageParam lpparam) {
+    // Phonograph
+    public static void com_kabouzeid_gramophone(XC_LoadPackage.LoadPackageParam lpparam) {
         findAndHookMethod("com.kabouzeid.gramophone.App",
                 lpparam.classLoader, "isProVersion", XC_MethodReplacement.returnConstant(true));
     }
 
-    public static void hookSolidExplorer(XC_LoadPackage.LoadPackageParam lpparam) {
+    // Solid Explorer
+    public static void pl_solidexplorer(XC_LoadPackage.LoadPackageParam lpparam) {
         // Pro mode
         findAndHookMethod("pl.solidexplorer.SELicenseManager", lpparam.classLoader,
                 "checkLicenseOnBackend", XC_MethodReplacement.returnConstant(true));
 
         // Unlock themes
+        // TODO not working
         c = findClass("pl.solidexplorer.common.res.ColorScheme", lpparam.classLoader);
         m = findMethodBestMatch(c, "getState");
         XposedBridge.hookMethod(m, XC_MethodReplacement.returnConstant(0));
     }
 
-    public static void hookBGstats(XC_LoadPackage.LoadPackageParam lpparam) {
+    // BG Stats
+    public static void nl_eerko_boardgamestats(XC_LoadPackage.LoadPackageParam lpparam) {
         c = findClass("nl.eerko.boardgamestats.main.AppUtils", lpparam.classLoader);
         m = findMethodBestMatch(c, "getSharedPreferenceBool", Context.class, String.class, boolean.class);
         XposedBridge.hookMethod(m, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log("getSharedPreferenceBool hooked.");
                 String pref = (String) param.args[1];
                 if (pref.indexOf("iap") == 0 && pref.indexOf("Active") == pref.length() - 6) {
                     param.setResult(true);
@@ -55,24 +59,21 @@ public class Hooks {
         });
     }
 
-    public static void hookTitaniumBackup(XC_LoadPackage.LoadPackageParam lpparam) {
-        c = findClass("o.ﭡ", lpparam.classLoader);
-        m = findMethodExact(c, "ˊ", "ﭡ", "ױ");
-        XposedBridge.hookMethod(m, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                param.args[0] = 2;
-            }
-        });
-    }
-
-    public static void hookSDMaid(XC_LoadPackage.LoadPackageParam lpparam) {
+    // SD Maid
+    public static void eu_thedarken_sdm(XC_LoadPackage.LoadPackageParam lpparam) {
         // Pro mode
         c = findClass("eu.thedarken.sdm.tools.upgrades.e", lpparam.classLoader);
         Class<?> d = findClass("eu.thedarken.sdm.tools.upgrades.d", lpparam.classLoader);
         m = findMethodExact(c, "a", d);
         XposedBridge.hookMethod(m, XC_MethodReplacement.returnConstant(true));
         // UI changes
-
+        // TODO
     }
+
+    // Sandbox
+    public static void sandbox_art_sandbox(XC_LoadPackage.LoadPackageParam lpparam) {
+        findAndHookMethod("sandbhox.art.sandbox.repositories.entities.Account",
+                lpparam.classLoader, "isSubscriptionActive", XC_MethodReplacement.returnConstant(true));
+    }
+
 }
