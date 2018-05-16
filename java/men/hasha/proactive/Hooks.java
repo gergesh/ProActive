@@ -4,15 +4,15 @@ import android.content.Context;
 
 import java.lang.reflect.Method;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findMethodBestMatch;
-import static de.robv.android.xposed.XposedHelpers.findMethodExact;
-
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.findMethodBestMatch;
+import static de.robv.android.xposed.XposedHelpers.findMethodExact;
 
 public class Hooks {
     static Class<?> c;
@@ -72,8 +72,13 @@ public class Hooks {
 
     // Sandbox
     public static void sandbox_art_sandbox(XC_LoadPackage.LoadPackageParam lpparam) {
-        findAndHookMethod("sandbhox.art.sandbox.repositories.entities.Account",
+        findAndHookMethod("sandbox.art.sandbox.repositories.entities.Account",
                 lpparam.classLoader, "isSubscriptionActive", XC_MethodReplacement.returnConstant(true));
+    }
+
+    // Deliveries
+    public static void de_orrs_deliveries(XC_LoadPackage.LoadPackageParam lpparam) {
+        findAndHookMethod("de.orrs.deliveries.c.a", lpparam.classLoader, "a", String.class, XC_MethodReplacement.returnConstant(""));
     }
 
 }

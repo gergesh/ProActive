@@ -8,18 +8,26 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class ProActive implements IXposedHookLoadPackage {
-    Method hookMethod = null;
-    Class hooksClass = Class.forname("men.hasha.proactive.Hooks");
+    Class<?> hookClass = null;
+    Method m;
 
-    public void handleLoadPackage(final LoadPackageParam lpparam) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+    public ProActive() throws ClassNotFoundException {
+    }
+
+    public void handleLoadPackage(final LoadPackageParam lpparam) throws InvocationTargetException, IllegalAccessException {
         // See if we have the hook
         try {
-            hookMethod = hooksClass.getDeclaredMethod(lpparam.packageName.replace('.', '_'));
-        } catch (NoSuchMethodException e) { }
+            hookClass = Class.forName("men.hasha.proactive.hooks." + lpparam.packageName.replace('.', '_'));
+        } catch (ClassNotFoundException e) { }
 
-        if (hookMethod != null) {
-            hookMethod.invoke(lpparam);
-            XposedBridge.log("Hooked " + lpparam.packageName);
+        if (hookClass != null) {
+            try {
+                m = hookClass.getDeclaredMethod("hook", LoadPackageParam.class);
+                m.invoke(null, lpparam);
+            } catch (NoSuchMethodException e) {
+                XposedBridge.log("No hook(lpparam) for " + lpparam.packageName + ". That's a problem.");
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
@@ -19,14 +19,15 @@ repositories {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 27
 
     defaultConfig {
         applicationId 'men.hasha.proactive'
         minSdkVersion 20
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 1
         versionName '1'
+
     }
 
     sourceSets {
